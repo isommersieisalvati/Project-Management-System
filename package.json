@@ -1,0 +1,44 @@
+{
+  "name": "noxoa",
+  "version": "1.0.0",
+  "description": "Full-stack Product Management System with React frontend and Node.js backend",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\" --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "npm run build && concurrently \"cd backend && npm start\" \"cd frontend && npm run preview\" --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\"",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test"
+  },
+  "keywords": [
+    "product-management",
+    "authentication",
+    "role-based-access",
+    "audit-logging",
+    "react",
+    "vite",
+    "redux-toolkit",
+    "node",
+    "typescript",
+    "postgresql"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isommersieisalvati/Project-Management-System.git"
+  },
+  "bugs": {
+    "url": "https://github.com/isommersieisalvati/Project-Management-System/issues"
+  },
+  "homepage": "https://github.com/isommersieisalvati/Project-Management-System#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
