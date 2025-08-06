@@ -1,13 +1,18 @@
-import React from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { store } from './store'
-import './App.css'
+import React from "react";
+import { Provider } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { store } from "./store";
+import "./App.css";
 
 // Placeholder components - we'll create these next
-const Login = () => <div>Login Page</div>
-const Dashboard = () => <div>Dashboard Page</div>
-const Products = () => <div>Products Page</div>
+const Login = () => <div>Login Page</div>;
+const Dashboard = () => <div>Dashboard Page</div>;
+const Products = () => <div>Products Page</div>;
 
 function App() {
   return (
@@ -23,7 +28,7 @@ function App() {
         </div>
       </Router>
     </Provider>
-  )
+  );
 }
 
-export default App
+export default App;

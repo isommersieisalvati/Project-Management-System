@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit'
-import authSlice from './slices/authSlice'
-import productSlice from './slices/productSlice'
-import auditSlice from './slices/auditSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import authSlice from "./slices/authSlice";
+import productSlice from "./slices/productSlice";
+import auditSlice from "./slices/auditSlice";
 
 export const store = configureStore({
   reducer: {
@@ -9,7 +9,7 @@ export const store = configureStore({
     products: productSlice,
     audit: auditSlice,
   },
-})
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
