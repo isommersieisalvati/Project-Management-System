@@ -109,10 +109,13 @@ export const login = async (req: Request, res: Response) => {
       [
         user.id,
         user.email,
-        "LOGIN",
-        "USER",
+        "login",
+        "user",
         user.id,
-        "User logged in successfully",
+        JSON.stringify({
+          message: "User logged in successfully",
+          timestamp: new Date().toISOString(),
+        }),
       ]
     );
 

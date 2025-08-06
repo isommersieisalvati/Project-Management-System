@@ -7,11 +7,16 @@ export interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
+  price: string | number; // Database returns string, but can be number too
   image?: string;
+  image_url?: string; // API returns image_url from database
   isDeleted?: boolean;
+  is_deleted?: boolean; // API returns is_deleted from database
   createdAt: string;
+  created_at?: string; // API returns created_at from database
   updatedAt: string;
+  updated_at?: string; // API returns updated_at from database
+  created_by?: number;
 }
 
 export interface ProductState {
