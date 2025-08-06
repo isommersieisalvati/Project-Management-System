@@ -14,13 +14,13 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Dashboard from "./components/dashboard/Dashboard";
+import ProductList from "./components/products/ProductList";
+import ProductForm from "./components/products/ProductForm";
 
 // Placeholder components - we'll create these next
-const Products = () => <div>Products Page</div>;
-const ProductForm = () => <div>Add/Edit Product Page</div>;
-const AuditLogs = () => <div>Audit Logs Page</div>;
+const AuditLogs: React.FC = () => <div>Audit Logs Page</div>;
 
-function App() {
+const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Router>
@@ -29,7 +29,7 @@ function App() {
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
+
             {/* Protected routes */}
             <Route
               path="/dashboard"
@@ -43,11 +43,11 @@ function App() {
               path="/products"
               element={
                 <ProtectedRoute>
-                  <Products />
+                  <ProductList />
                 </ProtectedRoute>
               }
             />
-            
+
             {/* Admin-only routes */}
             <Route
               path="/products/new"
@@ -73,7 +73,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             {/* Default redirect */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
@@ -81,6 +81,6 @@ function App() {
       </Router>
     </Provider>
   );
-}
+};
 
 export default App;

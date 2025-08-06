@@ -5,7 +5,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,8 +24,8 @@ export interface AuditLog {
   id: number;
   userId: number;
   userEmail: string;
-  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'REGISTER';
-  entityType: 'USER' | 'PRODUCT';
+  action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "REGISTER";
+  entityType: "USER" | "PRODUCT";
   entityId?: number;
   details?: string;
   createdAt: Date;
@@ -48,5 +48,5 @@ export interface RegisterRequest {
   password: string;
   firstName: string;
   lastName: string;
-  role?: 'admin' | 'user';
+  role?: "admin" | "user";
 }

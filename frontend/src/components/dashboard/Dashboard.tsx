@@ -2,9 +2,10 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/authSlice";
+import ProductList from "../products/ProductList";
 import type { RootState, AppDispatch } from "../../store";
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -50,13 +51,14 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
+          {/* Welcome Section */}
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Welcome to your Dashboard
               </h2>
               <p className="text-gray-600 mb-8">
-                {user.role === "admin" 
+                {user.role === "admin"
                   ? "As an admin, you have full access to manage products and view audit logs."
                   : "As a user, you can view products and their details."}
               </p>
@@ -64,7 +66,7 @@ const Dashboard = () => {
               {/* Role-specific action cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Products Card - Available to all users */}
-                <div className="bg-white overflow-hidden shadow rounded-lg">
+                <div className="bg-white overflow-hidden shadow rounded-lg border">
                   <div className="p-5">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
@@ -88,7 +90,9 @@ const Dashboard = () => {
                             Products
                           </dt>
                           <dd className="text-lg font-medium text-gray-900">
-                            {user.role === "admin" ? "Manage Products" : "View Products"}
+                            {user.role === "admin"
+                              ? "Manage Products"
+                              : "View Products"}
                           </dd>
                         </dl>
                       </div>
@@ -121,7 +125,7 @@ const Dashboard = () => {
                 {user.role === "admin" && (
                   <>
                     {/* Add Product Card */}
-                    <div className="bg-white overflow-hidden shadow rounded-lg">
+                    <div className="bg-white overflow-hidden shadow rounded-lg border">
                       <div className="p-5">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
@@ -175,7 +179,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Audit Logs Card */}
-                    <div className="bg-white overflow-hidden shadow rounded-lg">
+                    <div className="bg-white overflow-hidden shadow rounded-lg border">
                       <div className="p-5">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
@@ -230,37 +234,11 @@ const Dashboard = () => {
                   </>
                 )}
               </div>
-
-              {/* User info section */}
-              <div className="mt-12 bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  Account Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium text-gray-700">Name:</span>
-                    <span className="ml-2 text-gray-900">
-                      {user.firstName} {user.lastName}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Email:</span>
-                    <span className="ml-2 text-gray-900">{user.email}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Role:</span>
-                    <span className="ml-2 text-gray-900 capitalize">{user.role}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Member since:</span>
-                    <span className="ml-2 text-gray-900">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
+
+          {/* Product Management Section */}
+          <ProductList />
         </div>
       </div>
     </div>

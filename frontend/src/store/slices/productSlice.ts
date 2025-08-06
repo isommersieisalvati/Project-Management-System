@@ -9,6 +9,7 @@ export interface Product {
   description: string;
   price: number;
   image?: string;
+  isDeleted?: boolean;
   createdAt: string;
   updatedAt: string;
 }
