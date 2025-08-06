@@ -5,6 +5,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  role: 'admin' | 'user';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -47,4 +48,5 @@ export interface RegisterRequest {
   password: string;
   firstName: string;
   lastName: string;
+  role?: 'admin' | 'user';
 }

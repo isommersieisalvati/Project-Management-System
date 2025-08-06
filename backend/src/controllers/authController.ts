@@ -6,7 +6,7 @@ import { LoginRequest, RegisterRequest } from "../types";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, firstName, lastName }: RegisterRequest = req.body;
+    const { email, password, firstName, lastName, role = 'user' }: RegisterRequest & { role?: string } = req.body;
 
     // Check if user already exists
     const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
@@ -19,8 +19,8 @@ export const register = async (req: Request, res: Response) => {
 
     // Create user
     const result = await pool.query(
-      'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name, created_at',
-      [email, hashedPassword, firstName, lastName]
+      'INSERT INTO users (email, password, first_name, last_name, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, email, first_name, last_name, role, created_at',
+      [email, hashedPassword, firstName, lastName, role]
     );
 
     const user = result.rows[0];
@@ -46,6 +46,7 @@ export const register = async (req: Request, res: Response) => {
         email: user.email,
         firstName: user.first_name,
         lastName: user.last_name,
+        role: user.role,
         createdAt: user.created_at
       }
     });
@@ -61,7 +62,7 @@ export const login = async (req: Request, res: Response) => {
 
     // Find user
     const result = await pool.query(
-      'SELECT id, email, password, first_name, last_name, created_at FROM users WHERE email = $1',
+      'SELECT id, email, password, first_name, last_name, role, created_at FROM users WHERE email = $1',
       [email]
     );
 
@@ -98,6 +99,7 @@ export const login = async (req: Request, res: Response) => {
         email: user.email,
         firstName: user.first_name,
         lastName: user.last_name,
+        role: user.role,
         createdAt: user.created_at
       }
     });
