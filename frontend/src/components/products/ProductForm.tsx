@@ -151,14 +151,14 @@ const ProductForm = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <div className="md:flex md:items-center md:justify-between mb-6">
+      <div className="bg-white shadow-xl rounded-xl border border-gray-100">
+        <div className="px-6 py-8 sm:p-8">
+          <div className="md:flex md:items-center md:justify-between mb-8">
             <div className="flex-1 min-w-0">
-              <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+              <h2 className="text-3xl font-extrabold leading-7 text-gray-900 sm:text-4xl sm:truncate">
                 {isEdit ? "Edit Product" : "Add New Product"}
               </h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-2 text-sm font-medium text-gray-600">
                 {isEdit
                   ? "Update the product information below"
                   : "Fill in the details to create a new product"}
@@ -171,24 +171,26 @@ const ProductForm = () => {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Product Name *
               </label>
-              <div className="mt-1">
+              <div>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                    errors.name ? "border-red-300" : ""
+                  className={`appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out sm:text-sm ${
+                    errors.name ? "border-red-300 ring-red-300" : ""
                   }`}
                   placeholder="Enter product name"
                 />
                 {errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                  <p className="mt-2 text-sm font-medium text-red-600">
+                    {errors.name}
+                  </p>
                 )}
               </div>
             </div>
@@ -197,24 +199,24 @@ const ProductForm = () => {
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Description *
               </label>
-              <div className="mt-1">
+              <div>
                 <textarea
                   id="description"
                   name="description"
                   rows={4}
                   value={formData.description}
                   onChange={handleInputChange}
-                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                    errors.description ? "border-red-300" : ""
+                  className={`appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out sm:text-sm resize-none ${
+                    errors.description ? "border-red-300 ring-red-300" : ""
                   }`}
                   placeholder="Enter product description"
                 />
                 {errors.description && (
-                  <p className="mt-2 text-sm text-red-600">
+                  <p className="mt-2 text-sm font-medium text-red-600">
                     {errors.description}
                   </p>
                 )}
@@ -225,13 +227,15 @@ const ProductForm = () => {
             <div>
               <label
                 htmlFor="price"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Price * (USD)
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="relative rounded-lg shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">$</span>
+                  <span className="text-gray-500 sm:text-sm font-medium">
+                    $
+                  </span>
                 </div>
                 <input
                   type="number"
@@ -241,53 +245,45 @@ const ProductForm = () => {
                   min="0"
                   value={formData.price}
                   onChange={handleInputChange}
-                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md ${
-                    errors.price ? "border-red-300" : ""
+                  className={`appearance-none relative block w-full pl-8 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out sm:text-sm ${
+                    errors.price ? "border-red-300 ring-red-300" : ""
                   }`}
                   placeholder="0.00"
                 />
                 {errors.price && (
-                  <p className="mt-2 text-sm text-red-600">{errors.price}</p>
+                  <p className="mt-2 text-sm font-medium text-red-600">
+                    {errors.price}
+                  </p>
                 )}
               </div>
             </div>
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Product Image
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
+              <div className="border-2 border-gray-300 border-dashed rounded-lg p-6 transition duration-150 ease-in-out hover:border-gray-400">
+                <div className="space-y-4 text-center">
                   {imagePreview ? (
                     <div className="mb-4">
                       <img
-                        className="mx-auto h-32 w-32 object-cover rounded-lg"
+                        className="mx-auto h-32 w-32 object-cover rounded-lg shadow-md"
                         src={imagePreview}
                         alt="Preview"
                       />
                     </div>
                   ) : (
-                    <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <div className="mx-auto h-16 w-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-gray-500 font-medium">Image</span>
+                    </div>
                   )}
-                  <div className="flex text-sm text-gray-600">
+                  <div className="flex text-sm text-gray-600 justify-center">
                     <label
                       htmlFor="image"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                      className="relative cursor-pointer bg-white rounded-md font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 transition duration-150 ease-in-out"
                     >
-                      <span>
+                      <span className="px-2 py-1">
                         {imagePreview ? "Change image" : "Upload a file"}
                       </span>
                       <input
@@ -299,9 +295,9 @@ const ProductForm = () => {
                         onChange={handleImageChange}
                       />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
+                    <p className="pl-1 font-medium">or drag and drop</p>
                   </div>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs font-medium text-gray-500">
                     PNG, JPG, GIF up to 10MB
                   </p>
                 </div>
@@ -309,44 +305,26 @@ const ProductForm = () => {
             </div>
 
             {/* Form Actions */}
-            <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+            <div className="flex justify-end space-x-4 pt-8 border-t border-gray-200">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
               >
                 {isSubmitting ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
+                  <span className="flex items-center">
+                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
                     {isEdit ? "Updating..." : "Creating..."}
-                  </>
+                  </span>
                 ) : (
-                  <>{isEdit ? "Update Product" : "Create Product"}</>
+                  <span>{isEdit ? "Update Product" : "Create Product"}</span>
                 )}
               </button>
             </div>

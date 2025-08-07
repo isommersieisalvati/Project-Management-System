@@ -66,32 +66,12 @@ const ProductList = () => {
 
   const getSortIcon = (field: string) => {
     if (sortBy !== field) {
-      return (
-        <svg
-          className="w-4 h-4 ml-1 text-gray-400"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M5 12l5 5 5-5H5z" />
-        </svg>
-      );
+      return null;
     }
-    return sortOrder === "asc" ? (
-      <svg
-        className="w-4 h-4 ml-1 text-indigo-600"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M15 8l-5-5-5 5h10z" />
-      </svg>
-    ) : (
-      <svg
-        className="w-4 h-4 ml-1 text-indigo-600"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M5 12l5 5 5 5H5z" />
-      </svg>
+    return (
+      <span className="ml-1 text-indigo-600 font-bold">
+        {sortOrder === "asc" ? "↑" : "↓"}
+      </span>
     );
   };
 
@@ -99,25 +79,7 @@ const ProductList = () => {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="flex items-center space-x-2">
-          <svg
-            className="animate-spin h-8 w-8 text-indigo-600"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
+          <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
           <span className="text-lg text-gray-600">Loading products...</span>
         </div>
       </div>
@@ -153,19 +115,7 @@ const ProductList = () => {
                 to="/products/new"
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               >
-                <svg
-                  className="h-4 w-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                  />
-                </svg>
+                <span className="mr-2">+</span>
                 Add Product
               </Link>
             </>
@@ -185,19 +135,10 @@ const ProductList = () => {
                 Search products
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
-                  </svg>
-                </div>
                 <input
                   type="text"
                   id="search"
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 sm:text-sm border-gray-300 rounded-md"
                   placeholder="Search by name or description..."
                   value={searchTerm}
                   onChange={handleSearch}
@@ -216,7 +157,9 @@ const ProductList = () => {
                 ].map((sort) => (
                   <button
                     key={sort.key}
-                    onClick={() => handleSort(sort.key as any)}
+                    onClick={() =>
+                      handleSort(sort.key as "name" | "price" | "createdAt")
+                    }
                     className={`inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md ${
                       sortBy === sort.key
                         ? "bg-indigo-50 text-indigo-700 border-indigo-300"
@@ -238,17 +181,7 @@ const ProductList = () => {
         <div className="rounded-md bg-red-50 p-4 mb-6">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-red-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <span className="text-red-400 text-xl">⚠️</span>
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-medium text-red-800">
@@ -265,19 +198,9 @@ const ProductList = () => {
       {/* Products Grid */}
       {paginatedProducts.length === 0 ? (
         <div className="text-center py-12">
-          <svg
-            className="mx-auto h-16 w-16 text-gray-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-            />
-          </svg>
+          <div className="mx-auto h-16 w-16 text-gray-300 flex items-center justify-center text-4xl">
+            📦
+          </div>
           <h3 className="mt-4 text-lg font-semibold text-gray-900">
             No products found
           </h3>
@@ -292,19 +215,7 @@ const ProductList = () => {
                 to="/products/new"
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-semibold rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               >
-                <svg
-                  className="h-4 w-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                  />
-                </svg>
+                <span className="mr-2">+</span>
                 Add your first product
               </Link>
             </div>
@@ -328,19 +239,7 @@ const ProductList = () => {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-48 bg-gray-100">
-                    <svg
-                      className="h-16 w-16 text-gray-300"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      />
-                    </svg>
+                    <span className="text-4xl text-gray-300">🖼️</span>
                   </div>
                 )}
               </div>
@@ -369,41 +268,17 @@ const ProductList = () => {
                       <>
                         <Link
                           to={`/products/edit/${product.id}`}
-                          className="inline-flex items-center p-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+                          className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
                           title="Edit product"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={1.5}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                            />
-                          </svg>
+                          Edit
                         </Link>
                         <button
                           onClick={() => setDeleteConfirm(product.id)}
-                          className="inline-flex items-center p-2 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                          className="inline-flex items-center px-3 py-2 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                           title="Delete product"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={1.5}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                            />
-                          </svg>
+                          Delete
                         </button>
                       </>
                     )}
@@ -519,19 +394,7 @@ const ProductList = () => {
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div className="mt-3 text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                <svg
-                  className="h-6 w-6 text-red-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"
-                  />
-                </svg>
+                <span className="text-2xl text-red-600">⚠️</span>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mt-4">
                 Delete Product

@@ -1,18 +1,31 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../store/slices/authSlice";
+import { logout, extendSession } from "../../store/slices/authSlice";
 import ProductList from "../products/ProductList";
 import type { RootState, AppDispatch } from "../../store";
 
 const Dashboard: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, sessionExpiry } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
+  };
+
+  const handleExtendSession = () => {
+    dispatch(extendSession());
+  };
+
+  const getTimeUntilExpiry = () => {
+    if (!sessionExpiry) return null;
+    const timeLeft = sessionExpiry - Date.now();
+    if (timeLeft <= 0) return "Expired";
+    const minutes = Math.floor(timeLeft / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    return `${minutes}m ${seconds}s`;
   };
 
   if (!user) {
@@ -31,12 +44,28 @@ const Dashboard: React.FC = () => {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
-                Welcome, {user.firstName} {user.lastName}
-              </span>
+              <div className="text-right">
+                <div className="text-sm text-gray-700">
+                  Welcome, {user.firstName} {user.lastName}
+                </div>
+                {sessionExpiry && (
+                  <div className="text-xs text-gray-500">
+                    Session expires in: {getTimeUntilExpiry()}
+                  </div>
+                )}
+              </div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                 {user.role}
               </span>
+              {sessionExpiry && (
+                <button
+                  onClick={handleExtendSession}
+                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  title="Extend session by 30 minutes"
+                >
+                  Extend Session
+                </button>
+              )}
               <button
                 onClick={handleLogout}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -70,19 +99,7 @@ const Dashboard: React.FC = () => {
                   <div className="p-5">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <svg
-                          className="h-6 w-6 text-indigo-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                          />
-                        </svg>
+                        <span className="text-2xl text-indigo-600">📦</span>
                       </div>
                       <div className="ml-5 w-0 flex-1">
                         <dl>
@@ -103,19 +120,7 @@ const Dashboard: React.FC = () => {
                         className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium inline-flex items-center"
                       >
                         {user.role === "admin" ? "Manage" : "View"} Products
-                        <svg
-                          className="ml-2 h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
+                        <span className="ml-2">→</span>
                       </Link>
                     </div>
                   </div>
@@ -129,19 +134,7 @@ const Dashboard: React.FC = () => {
                       <div className="p-5">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <svg
-                              className="h-6 w-6 text-green-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 4v16m8-8H4"
-                              />
-                            </svg>
+                            <span className="text-2xl text-green-600">➕</span>
                           </div>
                           <div className="ml-5 w-0 flex-1">
                             <dl>
@@ -160,19 +153,7 @@ const Dashboard: React.FC = () => {
                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium inline-flex items-center"
                           >
                             Add Product
-                            <svg
-                              className="ml-2 h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
+                            <span className="ml-2">→</span>
                           </Link>
                         </div>
                       </div>
@@ -183,19 +164,7 @@ const Dashboard: React.FC = () => {
                       <div className="p-5">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <svg
-                              className="h-6 w-6 text-purple-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                              />
-                            </svg>
+                            <span className="text-2xl text-purple-600">📋</span>
                           </div>
                           <div className="ml-5 w-0 flex-1">
                             <dl>
@@ -214,19 +183,7 @@ const Dashboard: React.FC = () => {
                             className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium inline-flex items-center"
                           >
                             View Logs
-                            <svg
-                              className="ml-2 h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
+                            <span className="ml-2">→</span>
                           </Link>
                         </div>
                       </div>
