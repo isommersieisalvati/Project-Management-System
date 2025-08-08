@@ -4,13 +4,8 @@ import helmet from "helmet";
 import path from "path";
 import dotenv from "dotenv";
 
-import { fileURLToPath } from "url";
-
-// const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load environment variables
-dotenv.config();
+// Load environment variables from project root
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 
 // Import routes
 import authRoutes from "./routes/auth";
