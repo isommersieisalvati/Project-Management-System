@@ -150,13 +150,28 @@ const ProductForm = () => {
   }
 
   return (
-    <div>
-      <div>
-        <div>
-          <div>
-            <div>
-              <h2>{isEdit ? "Edit Product" : "Add New Product"}</h2>
-              <p>
+    <div className="flex w-screen h-screen">
+      {/* Left Panel - Welcome Section */}
+      <div className="w-1/2 bg-[rgb(3,4,95)] flex flex-col justify-center items-center p-8">
+        <h2 className="text-[rgb(240,240,240)] [font-family:sans-serif] text-6xl md:text-4xl font-extrabold mb-4">
+          {isEdit ? "Edit Product" : "Add Product"}
+        </h2>
+        <p className="text-[rgb(229,229,229)] w-3/4 font-serif text-2xl md:text-lg max-w-md text-center">
+          {isEdit
+            ? "Update the product information using the form on the right."
+            : "Fill in the details to create a new product for your inventory."}
+        </p>
+      </div>
+
+      {/* Right Panel - Form */}
+      <div className="w-1/2 flex flex-col justify-start items-center p-8 bg-gray-100">
+        <div className="w-full max-w-lg">
+          <div className="mb-6">
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-6 mr-2">
+              <h2 className="font-mono text-3xl font-bold mb-2">
+                {isEdit ? "Edit Product" : "Add New Product"}
+              </h2>
+              <p className="font-serif text-sm mb-4">
                 {isEdit
                   ? "Update the product information below"
                   : "Fill in the details to create a new product"}
@@ -164,10 +179,15 @@ const ProductForm = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Product Name */}
-            <div>
-              <label htmlFor="name">Product Name *</label>
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+              <label
+                htmlFor="name"
+                className="font-serif text-sm font-bold mb-2 block"
+              >
+                Product Name *
+              </label>
               <div>
                 <input
                   type="text"
@@ -176,14 +196,24 @@ const ProductForm = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Enter product name"
+                  className="w-full border-solid border-2 border-gray-300 rounded-md p-2"
                 />
-                {errors.name && <p>{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1 font-serif">
+                    {errors.name}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Description */}
-            <div>
-              <label htmlFor="description">Description *</label>
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+              <label
+                htmlFor="description"
+                className="font-serif text-sm font-bold mb-2 block"
+              >
+                Description *
+              </label>
               <div>
                 <textarea
                   id="description"
@@ -192,49 +222,72 @@ const ProductForm = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   placeholder="Enter product description"
+                  className="w-full border-solid border-2 border-gray-300 rounded-md p-2"
                 />
-                {errors.description && <p>{errors.description}</p>}
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1 font-serif">
+                    {errors.description}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Price */}
-            <div>
-              <label htmlFor="price">Price * (USD)</label>
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+              <label
+                htmlFor="price"
+                className="font-serif text-sm font-bold mb-2 block"
+              >
+                Price * (USD)
+              </label>
               <div>
-                <div>
-                  <span>$</span>
+                <div className="flex">
+                  <span className="border-solid border-2 border-gray-300 rounded-l-md p-2 bg-gray-100 text-gray-600">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    step="0.01"
+                    min="0"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    placeholder="0.00"
+                    className="flex-1 border-solid border-2 border-l-0 border-gray-300 rounded-r-md p-2"
+                  />
                 </div>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  step="0.01"
-                  min="0"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="0.00"
-                />
-                {errors.price && <p>{errors.price}</p>}
+                {errors.price && (
+                  <p className="text-red-500 text-sm mt-1 font-serif">
+                    {errors.price}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Image Upload */}
-            <div>
-              <label>Product Image</label>
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+              <label className="font-serif text-sm font-bold mb-2 block">
+                Product Image
+              </label>
               <div>
-                <div>
+                <div className="border-2 border-dashed border-gray-300 rounded-md p-6">
                   {imagePreview ? (
-                    <div>
-                      <img src={imagePreview} alt="Preview" />
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover border-solid border-2 border-gray-300 rounded-md mb-4"
+                      />
                     </div>
                   ) : (
-                    <div>
-                      <span>Image</span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-6xl mb-4">🖼️</span>
                     </div>
                   )}
-                  <div>
-                    <label htmlFor="image">
-                      <span>
+                  <div className="text-center">
+                    <label htmlFor="image" className="cursor-pointer">
+                      <span className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm inline-block">
                         {imagePreview ? "Change image" : "Upload a file"}
                       </span>
                       <input
@@ -243,30 +296,48 @@ const ProductForm = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
+                        className="hidden"
                       />
                     </label>
-                    <p>or drag and drop</p>
+                    <p className="font-serif text-sm text-gray-600 mt-2">
+                      or drag and drop
+                    </p>
                   </div>
-                  <p>PNG, JPG, GIF up to 10MB</p>
+                  <p className="font-serif text-xs text-gray-500 text-center mt-2">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Form Actions */}
-            <div>
-              <button type="button" onClick={handleCancel}>
-                Cancel
-              </button>
-              <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <span>
-                    <span></span>
-                    {isEdit ? "Updating..." : "Creating..."}
-                  </span>
-                ) : (
-                  <span>{isEdit ? "Update Product" : "Create Product"}</span>
-                )}
-              </button>
+            <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+              <div className="flex flex-row gap-4 justify-end">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm bg-[rgb(3,4,95)] text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center">
+                      <span className="mr-2">⏳</span>
+                      {isEdit ? "Updating..." : "Creating..."}
+                    </span>
+                  ) : (
+                    <span className="flex items-center">
+                      <span className="mr-2">{isEdit ? "✏️" : "➕"}</span>
+                      {isEdit ? "Update Product" : "Create Product"}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>

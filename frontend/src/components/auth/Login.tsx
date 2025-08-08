@@ -152,8 +152,12 @@ const Login = () => {
                   <p className="items-start text-sm text-gray-600 font-serif">
                     👑 <strong>Admin Account:</strong>
                   </p>
-                  <p className="text-xs text-gray-500">Email: admin@demo.com</p>
-                  <p className="text-xs text-gray-500">Password: admin123</p>
+                  <p className="text-xs text-gray-500">
+                    Email: admin@example.com
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Password: AdminPass123
+                  </p>
                 </div>
 
                 <div className="mb-4 mr-10 ml-10 flex flex-col">
