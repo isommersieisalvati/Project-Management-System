@@ -21,14 +21,31 @@ const ProductList = () => {
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const itemsPerPage = 12;
 
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+
+  // Update local state when Redux searchTerm changes
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    dispatch(setSearchTerm(localSearchTerm));
+    setCurrentPage(1);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearchSubmit();
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchProducts({ search: searchTerm, sortBy, sortOrder }));
   }, [dispatch, searchTerm, sortBy, sortOrder]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(e.target.value));
-    setCurrentPage(1);
-  };
 
   const handleSort = (field: "name" | "price" | "createdAt") => {
     if (sortBy === field) {
@@ -68,36 +85,44 @@ const ProductList = () => {
     if (sortBy !== field) {
       return null;
     }
-    return <span>{sortOrder === "asc" ? "↑" : "↓"}</span>;
+    return <span className="ml-1">{sortOrder === "asc" ? "↑" : "↓"}</span>;
   };
 
   if (isLoading) {
     return (
-      <div>
-        <div>
-          <div></div>
-          <span>Loading products...</span>
+      <div className="flex flex-col items-center justify-center p-8">
+        <div className="flex items-center">
+          <div className="border-solid border-2 border-gray-300 rounded-md p-4 mr-2 bg-white"></div>
+          <span className="font-serif text-lg">Loading products...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="w-full">
       {/* Header */}
-      <div>
-        <div>
-          <h2>Products</h2>
-          <p>{filteredProducts.length} products found</p>
+      <div className="mb-6">
+        <div className="flex flex-row justify-between items-center mb-4">
+          <h2 className="font-mono text-2xl font-bold">Products</h2>
+          <p className="text-[rgb(229,229,229)] font-serif text-sm">
+            {filteredProducts.length} products found
+          </p>
         </div>
-        <div>
+        <div className="flex flex-row gap-4">
           {user?.role === "admin" && (
             <>
-              <button onClick={() => setShowDeleted(!showDeleted)}>
+              <button
+                onClick={() => setShowDeleted(!showDeleted)}
+                className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm"
+              >
                 {showDeleted ? "Hide Deleted" : "Show Deleted"}
               </button>
-              <Link to="/products/new">
-                <span>+</span>
+              <Link
+                to="/products/new"
+                className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm flex items-center"
+              >
+                <span className="mr-1">+</span>
                 Add Product
               </Link>
             </>
@@ -106,24 +131,40 @@ const ProductList = () => {
       </div>
 
       {/* Search and Filters */}
-      <div>
-        <div>
-          <div>
-            <div>
-              <label htmlFor="search">Search products</label>
-              <div>
+      <div className="mb-6">
+        <div className="bg-white rounded-md border-solid border-2 border-gray-300 p-4 mr-2">
+          <div className="flex flex-col gap-4">
+            <div className="w-full">
+              <label
+                htmlFor="search"
+                className="font-serif text-sm font-bold mb-2 block"
+              >
+                Search products
+              </label>
+              <div className="flex flex-row gap-2 w-full">
                 <input
                   type="text"
                   id="search"
                   placeholder="Search by name or description..."
-                  value={searchTerm}
-                  onChange={handleSearch}
+                  value={localSearchTerm}
+                  onChange={handleSearchInput}
+                  onKeyPress={handleKeyPress}
+                  className="flex-1 border-solid border-2 border-gray-300 rounded-md p-2"
                 />
+                <button
+                  onClick={handleSearchSubmit}
+                  className="border-solid border-2 border-gray-300 rounded-md p-2 text-sm flex items-center"
+                >
+                  <span className="mr-1">🔍</span>
+                  Search
+                </button>
               </div>
             </div>
-            <div>
-              <label>Sort by</label>
-              <div>
+            <div className="w-full">
+              <label className="font-serif text-sm font-bold mb-2 block">
+                Sort by
+              </label>
+              <div className="flex flex-row gap-2">
                 {[
                   { key: "name", label: "Name" },
                   { key: "price", label: "Price" },
@@ -134,6 +175,7 @@ const ProductList = () => {
                     onClick={() =>
                       handleSort(sort.key as "name" | "price" | "createdAt")
                     }
+                    className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm flex items-center"
                   >
                     {sort.label}
                     {getSortIcon(sort.key)}
@@ -147,15 +189,15 @@ const ProductList = () => {
 
       {/* Error Message */}
       {error && (
-        <div>
-          <div>
-            <div>
-              <span>⚠️</span>
+        <div className="mb-6">
+          <div className="bg-red-50 border-solid border-2 border-red-300 rounded-md p-4 mr-2">
+            <div className="flex items-center">
+              <span className="text-2xl mr-3">⚠️</span>
             </div>
-            <div>
-              <h3>Error loading products</h3>
-              <div>
-                <p>{error}</p>
+            <div className="ml-2">
+              <h3 className="font-bold text-lg">Error loading products</h3>
+              <div className="mt-1">
+                <p className="font-serif text-sm">{error}</p>
               </div>
             </div>
           </div>
@@ -164,63 +206,82 @@ const ProductList = () => {
 
       {/* Products Grid */}
       {paginatedProducts.length === 0 ? (
-        <div>
-          <div>📦</div>
-          <h3>No products found</h3>
-          <p>
+        <div className="flex flex-col items-center justify-center p-8 bg-white border-solid border-2 border-gray-300 rounded-md mr-2">
+          <div className="text-6xl mb-4">📦</div>
+          <h3 className="font-mono text-xl font-bold mb-2">
+            No products found
+          </h3>
+          <p className="font-serif text-center mb-4">
             {searchTerm
               ? "Try adjusting your search terms."
               : "Get started by adding a new product."}
           </p>
           {user?.role === "admin" && !searchTerm && (
-            <div>
-              <Link to="/products/new">
-                <span>+</span>
+            <div className="mt-4">
+              <Link
+                to="/products/new"
+                className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 flex items-center"
+              >
+                <span className="mr-1">+</span>
                 Add your first product
               </Link>
             </div>
           )}
         </div>
       ) : (
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {paginatedProducts.map((product) => (
-            <div key={product.id}>
-              <div>
+            <div
+              key={product.id}
+              className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2"
+            >
+              <div className="mb-4">
                 {product.image_url ? (
                   <img
                     src={`http://localhost:3001${product.image_url}`}
                     alt={product.name}
+                    className="w-full h-48 object-cover border-solid border-2 border-gray-300 rounded-md"
                   />
                 ) : (
-                  <div>
-                    <span>🖼️</span>
+                  <div className="w-full h-48 bg-gray-100 border-solid border-2 border-gray-300 rounded-md flex items-center justify-center">
+                    <span className="text-4xl">🖼️</span>
                   </div>
                 )}
               </div>
-              <div>
-                <div>
-                  <div>
-                    <h3>
+              <div className="flex flex-col">
+                <div className="mb-3">
+                  <div className="flex items-start justify-between">
+                    <h3 className="font-mono text-lg font-bold">
                       {product.name}
-                      {product.is_deleted && <span>Deleted</span>}
+                      {product.is_deleted && (
+                        <span className="ml-2 text-red-500 text-sm">
+                          Deleted
+                        </span>
+                      )}
                     </h3>
-                    <p>{product.description}</p>
                   </div>
+                  <p className="font-serif text-sm mt-1">
+                    {product.description}
+                  </p>
                 </div>
-                <div>
-                  <span>${Number(product.price).toFixed(2)}</span>
-                  <div>
+                <div className="flex flex-row justify-between items-center mb-3">
+                  <span className="font-bold text-lg">
+                    ${Number(product.price).toFixed(2)}
+                  </span>
+                  <div className="flex flex-row gap-2">
                     {user?.role === "admin" && !product.is_deleted && (
                       <>
                         <Link
                           to={`/products/edit/${product.id}`}
                           title="Edit product"
+                          className="border-solid border-2 border-gray-300 rounded-md p-1 text-xs"
                         >
                           Edit
                         </Link>
                         <button
                           onClick={() => setDeleteConfirm(product.id)}
                           title="Delete product"
+                          className="border-solid border-2 border-red-300 rounded-md p-1 text-xs bg-red-50"
                         >
                           Delete
                         </button>
@@ -228,7 +289,7 @@ const ProductList = () => {
                     )}
                   </div>
                 </div>
-                <div>
+                <div className="text-xs font-serif text-gray-600">
                   Created:{" "}
                   {new Date(
                     product.created_at || product.createdAt
@@ -242,11 +303,12 @@ const ProductList = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div>
-          <div>
+        <div className="mt-8">
+          <div className="flex flex-row justify-between items-center mb-4">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
+              className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm disabled:opacity-50"
             >
               Previous
             </button>
@@ -255,29 +317,42 @@ const ProductList = () => {
                 setCurrentPage(Math.min(totalPages, currentPage + 1))
               }
               disabled={currentPage === totalPages}
+              className="border-solid border-2 border-gray-300 rounded-md p-2 mr-2 text-sm disabled:opacity-50"
             >
               Next
             </button>
           </div>
-          <div>
-            <div>
-              <p>
-                Showing <span>{startIndex + 1}</span> to{" "}
-                <span>
+          <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-4 mr-2">
+            <div className="flex flex-col items-center gap-4">
+              <p className="font-serif text-sm">
+                Showing <span className="font-bold">{startIndex + 1}</span> to{" "}
+                <span className="font-bold">
                   {Math.min(startIndex + itemsPerPage, filteredProducts.length)}
                 </span>{" "}
-                of <span>{filteredProducts.length}</span> results
+                of <span className="font-bold">{filteredProducts.length}</span>{" "}
+                results
               </p>
             </div>
-            <div>
-              <nav>
+            <div className="flex justify-center mt-4">
+              <nav className="flex flex-row gap-1">
                 <button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                ></button>
+                  className="border-solid border-2 border-gray-300 rounded-md p-2 text-sm disabled:opacity-50"
+                >
+                  ←
+                </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
-                    <button key={page} onClick={() => setCurrentPage(page)}>
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`border-solid border-2 border-gray-300 rounded-md p-2 text-sm ${
+                        currentPage === page
+                          ? "bg-[rgb(3,4,95)] text-white"
+                          : ""
+                      }`}
+                    >
                       {page}
                     </button>
                   )
@@ -287,7 +362,10 @@ const ProductList = () => {
                     setCurrentPage(Math.min(totalPages, currentPage + 1))
                   }
                   disabled={currentPage === totalPages}
-                ></button>
+                  className="border-solid border-2 border-gray-300 rounded-md p-2 text-sm disabled:opacity-50"
+                >
+                  →
+                </button>
               </nav>
             </div>
           </div>
@@ -296,25 +374,33 @@ const ProductList = () => {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div>
-          <div>
-            <div>
-              <div>
-                <span>⚠️</span>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white border-solid border-2 border-gray-300 rounded-md p-6 max-w-md mx-4">
+            <div className="flex items-center mb-4">
+              <div className="mr-3">
+                <span className="text-2xl">⚠️</span>
               </div>
-              <h3>Delete Product</h3>
-              <div>
-                <p>
-                  Are you sure you want to delete this product? This action
-                  cannot be undone.
-                </p>
-              </div>
-              <div>
-                <button onClick={() => handleDelete(deleteConfirm)}>
-                  Delete
-                </button>
-                <button onClick={() => setDeleteConfirm(null)}>Cancel</button>
-              </div>
+              <h3 className="font-mono text-xl font-bold">Delete Product</h3>
+            </div>
+            <div className="mb-6">
+              <p className="font-serif">
+                Are you sure you want to delete this product? This action cannot
+                be undone.
+              </p>
+            </div>
+            <div className="flex flex-row gap-3 justify-end">
+              <button
+                onClick={() => handleDelete(deleteConfirm)}
+                className="border-solid border-2 border-red-300 rounded-md p-2 text-sm bg-red-50"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="border-solid border-2 border-gray-300 rounded-md p-2 text-sm"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
