@@ -68,7 +68,7 @@ app.use("*", (req, res) => {
 async function startServer() {
   try {
     // Create database tables
-    await createTables();
+    // await createTables();
     console.log("Database initialized successfully");
 
     app.listen(PORT, () => {
