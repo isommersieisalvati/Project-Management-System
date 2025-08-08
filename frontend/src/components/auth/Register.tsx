@@ -75,9 +75,11 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isPasswordValid || !doPasswordsMatch) {
-      return;
-    }
+    // console.log(isPasswordValid, doPasswordsMatch);
+
+    // if (!isPasswordValid || !doPasswordsMatch) {
+    //   return;
+    // }
 
     try {
       const result = await dispatch(
@@ -262,7 +264,7 @@ const Register: React.FC = () => {
             <div className="mb-4">
               <button
                 type="submit"
-                disabled={isLoading || !isPasswordValid || !doPasswordsMatch}
+                // disabled={isLoading || !isPasswordValid || !doPasswordsMatch}
                 className=""
               >
                 {isLoading ? (
