@@ -8,9 +8,9 @@ interface ProtectedRouteProps {
   requiredRole?: "admin" | "user";
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requiredRole 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requiredRole,
 }) => {
   const { user, token } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
