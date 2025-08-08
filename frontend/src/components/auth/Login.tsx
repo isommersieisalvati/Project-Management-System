@@ -165,7 +165,9 @@ const Login = () => {
                     👤 <strong>User Account:</strong>
                   </p>
                   <p className="text-xs text-gray-500">Email: user@demo.com</p>
-                  <p className="text-xs text-gray-500">Password: user123</p>
+                  <p className="text-xs text-gray-500">
+                    Password: UserDemo123&
+                  </p>
                 </div>
               </div>
             </div>
